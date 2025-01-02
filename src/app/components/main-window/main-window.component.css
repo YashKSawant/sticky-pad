@@ -1,0 +1,16 @@
+@import '../../../styles.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+    .title{
+        @apply ml-4
+    }
+    .title-icons{
+        @apply opacity-55
+    }
+    .sub-title{
+        @apply ml-2
+    }
+}

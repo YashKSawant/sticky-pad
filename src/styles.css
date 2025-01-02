@@ -1,1 +1,55 @@
 /* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body{
+    @apply m-0 bg-gray-900 text-white
+}
+
+.draggable-area {
+  -webkit-app-region: drag;
+  cursor: move;
+}
+
+.non-draggable {
+  -webkit-app-region: no-drag;
+  cursor: default;
+}
+
+/* Tailwind Global CSS */
+@layer components{
+    .custom-title-bar {
+        @apply flex justify-between items-center bg-gray-800
+    }
+    .btn{
+        @apply transition-all duration-300  text-white m-0 cursor-pointer p-3 hover:bg-gray-700
+    }
+    .btn-sm{
+        @apply p-1 px-2
+    }
+    .close-btn{
+        @apply text-white m-0 cursor-pointer p-3 hover:bg-red-700   
+    }
+}
+
+/* Scrollbar CSS */
+ .custom-scrollbar {
+    @apply overflow-y-auto transition-all duration-300; 
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply w-2; 
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-900; 
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-600 rounded-lg; 
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500; 
+  }
