@@ -53,3 +53,8 @@ body{
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-500; 
   }
+
+  #editor {
+  width: 100%; /* Full width */
+  min-height: 100vh; /* Minimum height */
+}

@@ -39,11 +39,11 @@ function createMainWindow() {
 // Create a new pad window
 function createNewPadWindow(padData) {
     let padWindow = new BrowserWindow({
-        width: 350,
+        width: 500,
         height: 400,
         modal: true, // Focus on pad
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,
             contextIsolation: false,
         }
     });
@@ -59,6 +59,7 @@ function createNewPadWindow(padData) {
 
     padWindows.push(padWindow); // Add the pad window to the array
 
+    padWindow.webContents.openDevTools();
     // Handle window close
     padWindow.on('closed', () => {
         padWindows = padWindows.filter((win) => win !== padWindow); // Remove it from the array
