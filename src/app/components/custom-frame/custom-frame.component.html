@@ -1,0 +1,15 @@
+<div class="custom-title-bar draggable-area">
+    <span class="app-title">{{title}}</span>
+    <div class="window-controls non-draggable">
+        <button class="btn btn-sm" onclick="window.electronAPI.minimize()">
+            <fa-icon [icon]="faWindowMinimize" size="sm"
+                class="title-icons"></fa-icon>
+            </button>
+        <button class="btn btn-sm" onclick="window.electronAPI.maximize()">
+            <fa-icon [icon]="faWindowMaximize" size="sm" class="title-icons"></fa-icon>
+        </button>
+        <button class="btn btn-sm close-btn" onclick="window.electronAPI.closeWindow()">
+            <fa-icon [icon]="faWindowClose" size="lg" class="title-icons"></fa-icon>
+        </button>
+    </div>
+</div>

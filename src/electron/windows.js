@@ -9,6 +9,7 @@ function createMainWindow() {
         width: 500,
         height: 800,
         title: "Sticky Pad",
+        frame: false,
         icon: path.join(__dirname, '../../public/icon.ico'),
         webPreferences: {
             nodeIntegration: false,
@@ -39,19 +40,29 @@ function createMainWindow() {
 // Create a new pad window
 function createNewPadWindow(padData) {
     let padWindow = new BrowserWindow({
-        width: 500,
-        height: 400,
-        modal: true, // Focus on pad
+        width: 350,
+        height: 500,
+        modal: true,
+        frame: false,
+        titleBarStyle: 'hidden',
         webPreferences: {
             nodeIntegration: false,
-            contextIsolation: false,
+            contextIsolation: true, // Ensure preload security
+            preload: path.join(__dirname, 'preload.js') // Ensure window.electronAPI works
         }
     });
 
     padWindow.setMenu(null);
     padWindow.setIcon(path.join(__dirname, '../../public/icon.ico'));
 
-    padWindow.loadURL('http://localhost:4200/pad');
+    const isDev = process.env.NODE_ENV === 'development';
+    if (isDev) {
+        padWindow.loadURL('http://localhost:4200/pad');
+    } else {
+        padWindow.loadFile(path.join(__dirname, '../dist/sticky-pad/browser/index.html'), {
+            hash: 'pad'
+        });
+    }
 
     padWindow.webContents.once('did-finish-load', () => {
         padWindow.webContents.send('init-pad', padData || {});

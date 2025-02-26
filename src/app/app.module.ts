@@ -8,13 +8,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { PadTileComponent } from './components/pad-tile/pad-tile.component';
 import { PadEditorComponent } from './components/pad-editor/pad-editor.component';
 import { MainWindowComponent } from './components/main-window/main-window.component';
+import { CustomFrameComponent } from './components/custom-frame/custom-frame.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PadTileComponent,
     PadEditorComponent,
-    MainWindowComponent
+    MainWindowComponent,
+    CustomFrameComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    .custom-title-bar {
+        @apply flex justify-between items-center bg-gray-900 text-white select-none;
+    }
+
+    .app-title {
+        @apply pl-4;
+    }
+
+    .window-controls {
+        @apply flex space-x-1;
+    }
+
+    .window-controls button {
+        @apply p-2;
+    }
+
+    .title-icons {
+        @apply opacity-55
+    }
+
+    .frane-border{
+        @apply h-px bg-gray-500 border-0 dark:bg-gray-700 
+    }
+
+}

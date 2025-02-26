@@ -1,4 +1,4 @@
-import { Component ,AfterViewInit} from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { faMinus, faTimes, faEllipsisH, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Editor from '@toast-ui/editor';
 
@@ -11,7 +11,7 @@ import Editor from '@toast-ui/editor';
 export class PadEditorComponent {
   editor!: Editor;
   pad = { title: '', content: '' };
-  title = "New Pad";
+  title = "";
   faMinimize = faMinus;
   faMore = faEllipsisH;
   faClose = faTimes;
@@ -22,7 +22,8 @@ export class PadEditorComponent {
       this.pad = padData; 
       this.title = padData.title;
     });
-   
+    // Get the window title from Electron's main process
+    this.title = (window as any).electronAPI.getTitle();
   }
 
   ngAfterViewInit() {

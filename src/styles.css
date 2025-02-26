@@ -58,3 +58,14 @@ body{
   width: 100%; /* Full width */
   min-height: 100vh; /* Minimum height */
 }
+
+@media only screen and (max-width: 480px) {
+  .toastui-editor-popup {
+    max-width: 200px;
+    margin-left: 0 !important;
+  }
+}
+
+.toastui-editor-defaultUI-toolbar{
+  padding: 0 10px !important;
+}
