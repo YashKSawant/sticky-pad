@@ -1,9 +1,11 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
-// Array to keep track of open pad windows
-let padWindows = [];
+// Using map to keep track of open pad windows
+const windowRegistry = new Map(); 
 
-// Create the main application window
+/**
+ * @description This method is used to create main window
+ */
 function createMainWindow() {
     mainWindow = new BrowserWindow({
         width: 500,
@@ -17,7 +19,7 @@ function createMainWindow() {
             preload: path.join(__dirname, 'preload.js')
         }
     });
-
+    windowRegistry.set(mainWindow.id, 'main')
     mainWindow.setMenu(null); // Remove the menu bar
     const isDev = process.env.NODE_ENV === 'development';
 
@@ -31,13 +33,19 @@ function createMainWindow() {
     if (isDev) {
         mainWindow.webContents.openDevTools();
     }
+    mainWindow.webContents.once('did-finish-load', () => {
+        mainWindow.webContents.send('set-win-type', 'main'); // Send to renderer
+    });
 
     mainWindow.on('closed', () => {
-        mainWindow = null;
+        windowRegistry.delete(mainWindow.id);
     });
 }
 
-// Create a new pad window
+/**
+ * @description This method is used to create new pad window
+ * @param {*} padData 
+ */
 function createNewPadWindow(padData) {
     let padWindow = new BrowserWindow({
         width: 350,
@@ -66,15 +74,16 @@ function createNewPadWindow(padData) {
 
     padWindow.webContents.once('did-finish-load', () => {
         padWindow.webContents.send('init-pad', padData || {});
+        padWindow.webContents.send('set-win-type', 'pad'); // Send to renderer
     });
 
-    padWindows.push(padWindow); // Add the pad window to the array
+    windowRegistry.set(padWindow.id, padWindow);
 
     padWindow.webContents.openDevTools();
     // Handle window close
     padWindow.on('closed', () => {
-        padWindows = padWindows.filter((win) => win !== padWindow); // Remove it from the array
+        windowRegistry.delete(padWindow.id);
     });
 }
 
-module.exports = { createMainWindow, createNewPadWindow };
+module.exports = { createMainWindow, createNewPadWindow ,windowRegistry };

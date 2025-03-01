@@ -1,6 +1,9 @@
 <div class="custom-title-bar draggable-area">
     <span class="app-title">{{title}}</span>
     <div class="window-controls non-draggable">
+        <button *ngIf="winType === 'pad'" class="btn btn-sm" onclick="window.electronAPI.togglePin()">
+            <fa-icon [icon]="faPin" size="sm" [ngClass]="isPinned ? 'text-red-600' : ''">></fa-icon>
+        </button>
         <button class="btn btn-sm" onclick="window.electronAPI.minimize()">
             <fa-icon [icon]="faWindowMinimize" size="sm"
                 class="title-icons"></fa-icon>

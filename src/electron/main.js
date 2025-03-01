@@ -1,13 +1,14 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { createMainWindow, createNewPadWindow } = require('./windows');
+const { createMainWindow, createNewPadWindow, windowRegistry } = require('./windows');
+const { registerShortcuts } = require('./shortcuts');
 const isDev = process.env.NODE_ENV === 'development';
 
 app.disableHardwareAcceleration();
 
 app.whenReady().then(() => {
     createMainWindow();
-
+    registerShortcuts();
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createMainWindow();
@@ -52,6 +53,26 @@ ipcMain.on('maximize-window', (event) => {
         }
     }
 });
+
+ipcMain.on('toggle-pin', (event) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (!window) return;
+    
+    // to get main window ID
+    const winType = windowRegistry.get(window.id); 
+    if (winType === 'main') {
+        return; // Do nothing for the main window
+    }
+
+    //pinned logic
+    const isCurrentlyPinned = window.isAlwaysOnTop();
+    const newPinnedState = !isCurrentlyPinned; // Toggle pin state
+    window.setAlwaysOnTop(newPinnedState);
+    window.setOpacity(newPinnedState ? 0.8 : 1);
+    event.sender.send('pin-state-changed', newPinnedState); // Send updated state
+
+});
+
 
 ipcMain.on('close-window', (event) => {
     const window = BrowserWindow.fromWebContents(event.sender);
