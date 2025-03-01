@@ -31,7 +31,7 @@ function createMainWindow() {
     }
 
     if (isDev) {
-        mainWindow.webContents.openDevTools();
+        // mainWindow.webContents.openDevTools();
     }
     mainWindow.webContents.once('did-finish-load', () => {
         mainWindow.webContents.send('set-win-type', 'main'); // Send to renderer
@@ -79,7 +79,7 @@ function createNewPadWindow(padData) {
 
     windowRegistry.set(padWindow.id, padWindow);
 
-    padWindow.webContents.openDevTools();
+    // padWindow.webContents.openDevTools();
     // Handle window close
     padWindow.on('closed', () => {
         windowRegistry.delete(padWindow.id);

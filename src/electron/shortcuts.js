@@ -16,7 +16,7 @@ function registerShortcuts() {
         console.log('Restoring pad windows...');
 
         BrowserWindow.getAllWindows().forEach(window => {
-            if (windowRegistry.get(window.id) === 'main') { // Exclude the main window
+            if (windowRegistry.get(window.id) !== 'main') { // Exclude the main window
                 if (window.isMinimized()) {
                     window.restore();
                 }
