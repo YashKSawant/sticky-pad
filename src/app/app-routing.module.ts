@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule ,isDevMode} from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PadEditorComponent } from './components/pad-editor/pad-editor.component';
 import { MainWindowComponent } from './components/main-window/main-window.component';
@@ -9,7 +9,7 @@ const routes: Routes = [
 ];
 
 @NgModule({ 
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: !isDevMode() })], // Enable hash-based routing for production
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

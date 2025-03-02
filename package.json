@@ -8,7 +8,7 @@
     "test": "ng test",
     "electron": "electron .",
     "electron:serve": "cross-env NODE_ENV=development concurrently \"ng serve\" \"wait-on http://localhost:4200 && electron .\"",
-    "build": "ng build --base-href ./ && electron-builder",
+    "build": "ng build --configuration production --base-href ./ && electron-builder",
     "build:win": "npm run build && electron-builder --win"
   },
   "main": "src/electron/main.js",
@@ -16,15 +16,19 @@
   "build": {
     "appId": "com.example.myapp",
     "productName": "Sticky Pad",
+    "asar": true,
     "directories": {
       "output": "dist",
       "buildResources": "public/"
     },
     "files": [
       "dist/**/*",
-      "src/electron/main.js",
+      "src/electron/**/*",
       "package.json",
       "public/**/*"
+    ],
+    "asarUnpack": [
+    "dist/sticky-pad/**/*"
     ],
     "win": {
       "icon": "public/icon.ico",

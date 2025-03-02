@@ -1,7 +1,9 @@
-const { BrowserWindow } = require('electron');
+const { BrowserWindow, app } = require('electron');
 const path = require('path');
-// Using map to keep track of open pad windows
-const windowRegistry = new Map(); 
+
+const windowRegistry = new Map(); // Store window types by ID
+
+let mainWindow = null;
 
 /**
  * @description This method is used to create main window
@@ -16,6 +18,7 @@ function createMainWindow() {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
+            webSecurity: false,
             preload: path.join(__dirname, 'preload.js')
         }
     });
@@ -23,22 +26,22 @@ function createMainWindow() {
     mainWindow.setMenu(null); // Remove the menu bar
     const isDev = process.env.NODE_ENV === 'development';
 
-    // Load the app's index.html
-    if (isDev) {
-        mainWindow.loadURL('http://localhost:4200');
-    } else {
-        mainWindow.loadFile(path.join(__dirname, '../dist/sticky-pad/browser/index.html'));
-    }
+    const appPath = isDev
+        ? 'http://localhost:4200'
+        : `file://${path.join(app.getAppPath(), 'dist', 'sticky-pad', 'browser', 'index.html')}`;
+    mainWindow.loadURL(appPath);
 
     if (isDev) {
-        // mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
     }
+
     mainWindow.webContents.once('did-finish-load', () => {
         mainWindow.webContents.send('set-win-type', 'main'); // Send to renderer
     });
 
     mainWindow.on('closed', () => {
         windowRegistry.delete(mainWindow.id);
+        mainWindow = null;
     });
 }
 
@@ -63,23 +66,24 @@ function createNewPadWindow(padData) {
     padWindow.setMenu(null);
     padWindow.setIcon(path.join(__dirname, '../../public/icon.ico'));
 
-    const isDev = process.env.NODE_ENV === 'development';
-    if (isDev) {
-        padWindow.loadURL('http://localhost:4200/pad');
-    } else {
-        padWindow.loadFile(path.join(__dirname, '../dist/sticky-pad/browser/index.html'), {
-            hash: 'pad'
-        });
-    }
+    const isDev = !app.isPackaged;
+    const padURL = isDev
+        ? 'http://localhost:4200/pad'
+        : `file://${path.join(app.getAppPath(), 'dist', 'sticky-pad', 'browser', 'index.html')}#pad`;
 
+    padWindow.loadURL(padURL, {
+        extraHeaders: 'pragma: no-cache\n'
+    });
     padWindow.webContents.once('did-finish-load', () => {
         padWindow.webContents.send('init-pad', padData || {});
         padWindow.webContents.send('set-win-type', 'pad'); // Send to renderer
     });
 
-    windowRegistry.set(padWindow.id, padWindow);
+    windowRegistry.set(padWindow.id, 'pad');
 
-    // padWindow.webContents.openDevTools();
+    if (isDev) {
+        padWindow.webContents.openDevTools();
+    }
     // Handle window close
     padWindow.on('closed', () => {
         windowRegistry.delete(padWindow.id);
